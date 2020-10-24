@@ -17,6 +17,8 @@ gr <- graph_from_data_frame(df, directed = FALSE) # Create graph from dataframe
 comps <- components(gr)
 largest_comp <- which(comps$membership == which.max(comps$csize))
 g <- induced_subgraph(gr, largest_comp)
+m <- "katz"
+t <- 2.8e-7
 #plot(g)
 
 iterations <- 50
@@ -56,7 +58,7 @@ for(i in 1:iterations){
   }
   
   #Predicting new links using common neighbors method
-  res_edgelist <- proxfun(subg, method = "katz", value = "edgelist")
+  res_edgelist <- proxfun(subg, method = m, value = "edgelist")
   
   
   #Analyse results
@@ -87,7 +89,7 @@ for(i in 1:iterations){
   drug_indication_links <- drug_indication_links[found_edges == 0, ]
   
   # select predicted edges with a threshold
-  threshold <-2.8e-7
+  threshold <-t
   # links that are above the threshold (new edges)
   drug_indication_links_sign <- drug_indication_links[drug_indication_links$value >= threshold,]
   # links that are below the threshold (deemed not to be edges)
